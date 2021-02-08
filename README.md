@@ -11,3 +11,15 @@ The following items describe the folder structure and what they contain.
 -- prototypes: a common folder for uploading prototype python scripts for discussion;
 - specification: contains documents with the description of the steps of development for achieving each individual goal we establish;
 - Anything other than the described folders is default Django Project structure and will not be described here.
+
+# Running Django Project
+- Open a console at the following location:
+./source_code/izzywishlist/
+
+- Run one of the following commands depending on the TCP port requirements:
+python manage.py runserver
+python manage.py runserver 9090
+
+- To access, open a browser and type the address:
+http://localhost:8000
+http://localhost:<port>
