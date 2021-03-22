@@ -1,5 +1,35 @@
 {% extends "playsapp/base.html" %}
+{% block app_name %} / Playsapp{% endblock %}
 {% block content %}
-  <h1>Hello Playsapp!</h1>
-  <h2>Work in progress... Coming soon...</h2>
+  <table style="width:100%">
+    <tr>
+      <th>ID</th>
+      <th>Game</th>
+      <th>Price</th>
+      <th>Discounted Price</th>
+      <th>Link</th>
+    </tr>
+    {% for game in games %}
+      <tr>
+        <td class="table_text">#{{ forloop.counter }}</td>
+        <td class="table_game_name">{{ game.name }}</td>
+        <td class="table_text">
+          {% if game.discounted_price %}
+            <del class="crossed_text">
+          {% endif %}
+          {{ game.base_price }}
+          {% if game.discounted_price %}
+            </del>
+          {% endif %}
+        </td>
+        {% if game.discounted_price %}
+          <td class="discount_text">{{ game.discounted_price }}</td>
+        {% else %}
+          <td class="no_discount_text">No discount :(</td>
+        {% endif %}
+        <td class="table_text"><a href="{{ game.link }}">Go to Store</a></td>
+
+      </tr>
+    {% endfor %}
+  </table>
 {% endblock %}
