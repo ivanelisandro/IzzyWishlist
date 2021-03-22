@@ -15,6 +15,8 @@ import os
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 LOG_FILE = os.path.join(BASE_DIR, 'izzywishlist.logs')
+PLAYSAPP_LINKS_PATH = os.path.join(BASE_DIR, 'playsapp/links.txt')  # You can choose any path you want
+PLAYSAPP_LINKS_PATH = os.environ.get('PLAYSAPP_LINKS_PATH') or PLAYSAPP_LINKS_PATH  # DO NOT MODIFY THIS LINE
 
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/2.2/howto/deployment/checklist/
