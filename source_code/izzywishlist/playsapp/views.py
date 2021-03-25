@@ -1,5 +1,4 @@
 from django.conf import settings
-from django.shortcuts import render
 from django.views.generic.base import TemplateView
 from html.parser import HTMLParser
 import json
@@ -88,7 +87,9 @@ class GameInfo:
         return {
             'product_id': self.product_id,
             'link': self.link,
+            'image_link': f"{self.image_link}?w=150",
             'name': self.name,
+            'category': self.category,
             'base_price': self.base_price,
             'discounted_price': self.format_discount(),
         }

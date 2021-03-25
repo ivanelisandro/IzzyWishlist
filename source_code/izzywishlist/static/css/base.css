@@ -8,7 +8,7 @@ html {
 }
 
 body {
-    margin: 15%;
+    margin: 10%;
     padding: 5%;
     background: #ffffff;
     line-height: 1.5;
@@ -34,8 +34,12 @@ button {
     font-size: 15px;
 }
 
+img {
+	padding: 0px;
+	border-radius: 15px;
+}
+
 .table_text {
-	border-radius: 0px 15px 0px 15px;
     text-align: center;
     font-size: 20px;
 	white-space:nowrap;
@@ -43,11 +47,16 @@ button {
 }
 
 .table_game_name {
-	border-radius: 0px 15px 0px 15px;
-    text-align: center;
+	padding: 0% 2%;
+    text-align: left;
     font-size: 20px;
     width: 50%;
 	overflow: hidden;
+}
+
+.table_game_category {
+    text-align: left;
+    font-size: 15px;
 }
 
 .discount_text {
