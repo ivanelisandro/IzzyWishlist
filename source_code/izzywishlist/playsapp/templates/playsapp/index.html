@@ -15,17 +15,21 @@
         <td class="table_text"><img src="{{ game.image_link }}"/></td>
         <td class="table_game_name">{{ game.name }}<br><div class="table_game_category">{{ game.category }}</div></td>
         <td class="table_text">
-          {% if game.discounted_price %}
+          {% if game.discounted_price or game.plus_discount %}
             <del class="crossed_text">
           {% endif %}
           {{ game.base_price }}
-          {% if game.discounted_price %}
+          {% if game.discounted_price or game.plus_discount %}
             </del>
           {% endif %}
           <br>
           {% if game.discounted_price %}
             <div class="discount_text">{{ game.discounted_price }}</div>
-          {% else %}
+          {% endif %}
+          {% if game.plus_discount %}
+            <div class="discount_text">{{ game.plus_discount }}</div>
+          {% endif %}
+          {% if not game.discounted_price and not game.plus_discount %}
             <div class="no_discount_text">No discount :(</div>
           {% endif %}
         </td>
@@ -34,4 +38,9 @@
       </tr>
     {% endfor %}
   </table>
+  <form action="/ps" method="post">{% csrf_token %}
+    <div class="input_game_label">Enter the game link and click Add:</div>
+    <input id="game_link" name="game_link" type="text" class="input_game">
+    <button type="submit">Add (reloads page)</button>
+  </form>
 {% endblock %}

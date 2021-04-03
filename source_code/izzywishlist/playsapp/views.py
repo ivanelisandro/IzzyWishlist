@@ -1,4 +1,5 @@
 from django.conf import settings
+from django.shortcuts import redirect
 from django.views.generic.base import TemplateView
 from html.parser import HTMLParser
 import json
@@ -13,34 +14,66 @@ class PSView(TemplateView):
     def __init__(self):
         super().__init__()
         self.wish = WishList()
-        self.wish.load()
-        self.wish.fill_list()
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        sorted_games = sorted(self.wish.games, key=operator.attrgetter('name'))
-        games = [game.to_dict() for game in sorted_games]
-        context['games'] = games
+        context['games'] = self.wish.get_sorted_games()
         return context
+
+    def post(self, request, *args, **kwargs):
+        if request.method == 'POST':  # If method is POST,
+            game_link = request.POST.get('game_link')
+            if game_link:
+                self.wish.add_game(game_link)
+
+        return redirect('/ps')
 
 
 class WishList:
+    default_game_link = ''
+
     def __init__(self):
         self.links = []
         self.games = []
+        self.load_links()
+        self.reload_games()
 
-    def load(self):
-        self.links = []
+    @staticmethod
+    def is_valid_link(link: str):
+        return link and link.startswith(WishList.default_game_link)
+
+    def load_links(self):
+        if len(self.links) > 0:
+            return
         with open(settings.PLAYSAPP_LINKS_PATH, encoding='utf-8') as file:
             for line in file.read().splitlines():
                 if line:
                     self.links.append(line)
 
-    def fill_list(self):
-        if len(self.games) > 0:
+    def save_links(self):
+        with open(settings.PLAYSAPP_LINKS_PATH, mode='w', encoding='utf-8') as file:
+            file.writelines('\n'.join(self.links))
+
+    def add_game(self, link):
+        if not self.is_valid_link(link):
             return
 
-        self.games = []
+        self.links.append(link)
+        thread = threading.Thread(target=self.load_game, args=(link,))
+        thread.start()
+        self.save_links()
+        thread.join()
+
+    def reload_required(self):
+        _game_added = False
+        for link in self.links:
+            for game in self.games:
+                if game.link == link:
+                    break
+            else:
+                return True
+
+    def reload_games(self):
         tasks = []
         for link in self.links:
             thread = threading.Thread(target=self.load_game, args=(link,))
@@ -57,6 +90,13 @@ class WishList:
         parser.feed(content)
         self.games.append(game)
 
+    def get_sorted_games(self):
+        if self.reload_required():
+            print("RELOADING")
+            self.reload_games()
+        sorted_games = sorted(self.games, key=operator.attrgetter('name'))
+        return [game.to_dict() for game in sorted_games]
+
 
 class GameInfo:
     def __init__(self, link):
@@ -72,16 +112,14 @@ class GameInfo:
         self.plus_discount = ''
         self.plus_percent = ''
 
-    def format_discount(self):
-        _base_discount = None
-        if self.discounted_price and self.discounted_price != self.base_price:
-            _base_discount = f'{self.discounted_price} ({self.discount_percent})'
-        if self.plus_discount and self.plus_discount != self.base_price:
-            if _base_discount:
-                _base_discount += " // "
-            _base_discount = f'{self.plus_discount} ({self.plus_percent}) w/ Plus'
+    def format_discount(self, discount, percent, is_plus=False):
+        _formatted = None
+        if discount and discount != self.base_price:
+            _formatted = f'{discount} ({percent})'
+        if _formatted and is_plus:
+            _formatted = f'w/ Plus: {_formatted}'
 
-        return _base_discount
+        return _formatted
 
     def to_dict(self):
         return {
@@ -91,7 +129,8 @@ class GameInfo:
             'name': self.name,
             'category': self.category,
             'base_price': self.base_price,
-            'discounted_price': self.format_discount(),
+            'discounted_price': self.format_discount(self.discounted_price, self.discount_percent),
+            'plus_discount': self.format_discount(self.plus_discount, self.plus_percent, True),
         }
 
 

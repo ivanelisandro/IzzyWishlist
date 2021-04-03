@@ -26,12 +26,27 @@ form {
 	overflow: hidden;
 }
 
-button {
-    background-color: #000000;
+input, textarea {
+    background-color: #ffffff;
+    color: #000000;
+    font-size: 15px;
+    margin: 10px 0px;
     padding: 10px 30px;
     border-radius: 15px;
+}
+
+button {
+    background-color: #004299;
+    padding: 10px 30px;
+	border-radius: 20px;
     color: #ffffff;
-    font-size: 15px;
+    font-size: 20px;
+    text-decoration: none;
+}
+
+button:hover{
+    color: #004299;
+	background-color: #ffffff;
 }
 
 img {
@@ -122,7 +137,14 @@ a:hover{
     font-size: 45px;
 }
 
-.new_article {
+.input_game_label {
+    text-align: left;
+	padding: 0px 20px;
+    font-size: 20px;
+	overflow: hidden;
+}
+
+.input_game {
 	width: 100%;
     -webkit-box-sizing: border-box; /* Safari/Chrome, other WebKit */
     -moz-box-sizing: border-box;    /* Firefox, other Gecko */
@@ -130,10 +152,6 @@ a:hover{
 }
 
 .article_button {
-	margin: 5% 0% 0% 0%;
+	/* margin: 5% 0% 0% 0%; */
 	float: right;
-}
-
-button:hover{
-    background-color: #004299;
 }
