@@ -42,7 +42,7 @@
       </tr>
     {% endfor %}
   </table>
-  <form action="/ps" method="post">{% csrf_token %}
+  <form action="/ps" method="post" class="centered_form">{% csrf_token %}
     <div class="input_game_label">Enter the game link and click Add:</div>
     <input id="game_link" name="game_link" type="text" class="input_game">
     <button type="submit">Add (reloads page)</button>

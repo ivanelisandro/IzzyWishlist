@@ -22,6 +22,12 @@ h1 {
 
 form {
     margin: 5% 0% 0% 0%;
+    text-align: left;
+	overflow: hidden;
+}
+
+.centered_form {
+    margin: 5% 0% 0% 0%;
     text-align: center;
 	overflow: hidden;
 }
@@ -156,7 +162,7 @@ a:hover{
 
 .games_count_label {
     text-align: left;
-	padding: 0px 60px;
+	padding: 0px 0px;
     font-size: 25px;
 	overflow: hidden;
 }
