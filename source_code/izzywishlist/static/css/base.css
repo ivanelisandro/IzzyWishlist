@@ -37,11 +37,14 @@ input, textarea {
 
 button {
     background-color: #004299;
-    padding: 10px 30px;
+    margin: 0px 10px;
+    padding: 5px 10px;
+	border: none;
 	border-radius: 20px;
     color: #ffffff;
     font-size: 20px;
     text-decoration: none;
+    cursor: pointer;
 }
 
 button:hover{
@@ -97,7 +100,7 @@ img {
 }
 
 a {
-	padding: 0px 10px;
+	padding: 5px 10px;
 	border-radius: 10px;
 	background-color: #004299;
     color: #ffffff;
@@ -149,6 +152,13 @@ a:hover{
     -webkit-box-sizing: border-box; /* Safari/Chrome, other WebKit */
     -moz-box-sizing: border-box;    /* Firefox, other Gecko */
     box-sizing: border-box;         /* Opera/IE 8+ */
+}
+
+.games_count_label {
+    text-align: left;
+	padding: 0px 60px;
+    font-size: 25px;
+	overflow: hidden;
 }
 
 .article_button {

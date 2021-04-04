@@ -1,6 +1,7 @@
 {% extends "playsapp/base.html" %}
 {% block app_name %} / Playsapp{% endblock %}
 {% block content %}
+  <div class="games_count_label">Games added to the wishlist: {{ games|length }}</div>
   <table style="width:100%">
     <tr>
       <th></th>
@@ -11,7 +12,12 @@
     </tr>
     {% for game in games %}
       <tr>
-        <td class="table_text">#{{ forloop.counter }}</td>
+        <td class="table_text">
+          <form action="/ps" method="post">{% csrf_token %}
+            <input hidden id="game_delete" name="game_delete" type="text" value="{{ game.link }}">
+            <button type="submit" ><i class="fa fa-trash"></i></button>
+          </form>
+        </td>
         <td class="table_text"><img src="{{ game.image_link }}"/></td>
         <td class="table_game_name">{{ game.name }}<br><div class="table_game_category">{{ game.category }}</div></td>
         <td class="table_text">

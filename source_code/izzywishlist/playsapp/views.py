@@ -23,8 +23,13 @@ class PSView(TemplateView):
     def post(self, request, *args, **kwargs):
         if request.method == 'POST':  # If method is POST,
             game_link = request.POST.get('game_link')
+            game_delete = request.POST.get('game_delete')
             if game_link:
+                print("ADD")
                 self.wish.add_game(game_link)
+            if game_delete:
+                print("DELETE")
+                self.wish.remove_game(game_delete)
 
         return redirect('/ps')
 
@@ -63,6 +68,24 @@ class WishList:
         thread.start()
         self.save_links()
         thread.join()
+
+    def remove_game(self, link):
+        _link_to_remove = ''
+        _game_to_remove = None
+        for game in self.games:
+            if game.link == link:
+                _game_to_remove = game
+                _link_to_remove = link
+
+        if _game_to_remove in self.games:
+            self.games.remove(_game_to_remove)
+        else:
+            print("ERROR")
+        if _link_to_remove in self.links:
+            self.links.remove(_link_to_remove)
+        else:
+            print("ERROR")
+        self.save_links()
 
     def reload_required(self):
         _game_added = False
