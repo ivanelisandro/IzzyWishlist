@@ -5,21 +5,19 @@
   <table style="width:100%">
     <tr>
       <th></th>
-      <th></th>
       <th>Game</th>
       <th>Price</th>
       <th>Link</th>
     </tr>
     {% for game in games %}
       <tr>
-        <td class="table_text">
+        <td class="table_text"><img src="{{ game.image_link }}"/></td>
+        <td class="table_game_name">{{ game.name }}<br><div class="table_game_category">{{ game.category }}</div>
           <form action="/ps" method="post">{% csrf_token %}
             <input hidden id="game_delete" name="game_delete" type="text" value="{{ game.link }}">
-            <button type="submit" ><i class="fa fa-trash"></i></button>
+            <button type="submit"><i class="fa fa-trash"></i></button>
           </form>
         </td>
-        <td class="table_text"><img src="{{ game.image_link }}"/></td>
-        <td class="table_game_name">{{ game.name }}<br><div class="table_game_category">{{ game.category }}</div></td>
         <td class="table_text">
           {% if game.discounted_price or game.plus_discount %}
             <del class="crossed_text">
