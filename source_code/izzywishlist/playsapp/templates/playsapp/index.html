@@ -7,15 +7,25 @@
       <th></th>
       <th>Game</th>
       <th>Price</th>
-      <th>Link</th>
+      <!--<th>Link</th>-->
     </tr>
     {% for game in games %}
       <tr>
         <td class="table_text"><img src="{{ game.image_link }}"/></td>
-        <td class="table_game_name">{{ game.name }}<br><div class="table_game_category">{{ game.category }}</div>
+        <td class="table_game_name">{{ game.name }}<br>
+          <div class="table_game_category">{{ game.category }}</div>
+          <div class="table_game_platform">
+            {% for platform in game.platforms %}
+              | {{ platform }}
+            {% endfor %}
+            {% if game.platforms %}
+              |
+            {% endif %}
+          </div>
           <form action="/ps" method="post">{% csrf_token %}
             <input hidden id="game_delete" name="game_delete" type="text" value="{{ game.link }}">
             <button type="submit"><i class="fa fa-trash"></i></button>
+            <a href="{{ game.link }}" target="_blank">Go Buy <i class="fa fa-external-link"></i></a>
           </form>
         </td>
         <td class="table_text">
@@ -37,7 +47,9 @@
             <div class="no_discount_text">No discount :(</div>
           {% endif %}
         </td>
-        <td class="table_text"><a href="{{ game.link }}">Go to Store</a></td>
+        <!--<td class="table_text">
+          <a href="{{ game.link }}" target="_blank">Go Buy <i class="fa fa-external-link"></i></a>
+        </td>-->
 
       </tr>
     {% endfor %}
@@ -45,6 +57,6 @@
   <form action="/ps" method="post" class="centered_form">{% csrf_token %}
     <div class="input_game_label">Enter the game link and click Add:</div>
     <input id="game_link" name="game_link" type="text" class="input_game">
-    <button type="submit">Add (reloads page)</button>
+    <button type="submit" class="submit_game">Add (reloads page)</button>
   </form>
 {% endblock %}

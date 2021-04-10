@@ -25,10 +25,8 @@ class PSView(TemplateView):
             game_link = request.POST.get('game_link')
             game_delete = request.POST.get('game_delete')
             if game_link:
-                print("ADD")
                 self.wish.add_game(game_link)
             if game_delete:
-                print("DELETE")
                 self.wish.remove_game(game_delete)
 
         return redirect('/ps')
@@ -80,11 +78,11 @@ class WishList:
         if _game_to_remove in self.games:
             self.games.remove(_game_to_remove)
         else:
-            print("ERROR")
+            print("Cannot remove game. Game not found.")
         if _link_to_remove in self.links:
             self.links.remove(_link_to_remove)
         else:
-            print("ERROR")
+            print("Cannot remove link. Link not found.")
         self.save_links()
 
     def reload_required(self):
@@ -122,11 +120,14 @@ class WishList:
 
 
 class GameInfo:
+    included = 'Incluído'
+
     def __init__(self, link):
         self.link = link
         self.product_id = link.rstrip("/").split("/")[-1]
         self.name = ''
         self.category = ''
+        self.platforms = []
         self.description = ''
         self.image_link = ''
         self.base_price = ''
@@ -138,7 +139,10 @@ class GameInfo:
     def format_discount(self, discount, percent, is_plus=False):
         _formatted = None
         if discount and discount != self.base_price:
-            _formatted = f'{discount} ({percent})'
+            if discount == self.included:
+                _formatted = f'R$ 0,00 ({percent})'
+            else:
+                _formatted = f'{discount} ({percent})'
         if _formatted and is_plus:
             _formatted = f'w/ Plus: {_formatted}'
 
@@ -151,6 +155,7 @@ class GameInfo:
             'image_link': f"{self.image_link}?w=150",
             'name': self.name,
             'category': self.category,
+            'platforms': self.platforms,
             'base_price': self.base_price,
             'discounted_price': self.format_discount(self.discounted_price, self.discount_percent),
             'plus_discount': self.format_discount(self.plus_discount, self.plus_percent, True),
@@ -171,6 +176,7 @@ class AppJson:
     cache = 'cache'
     product_id = 'productId'
     product = f'Product:'
+    platforms = 'platforms'
     price = 'price'
     web_ctas = 'webctas'
     refs = '__ref'
@@ -227,6 +233,7 @@ class PSParser(HTMLParser):
             if AppJson.cache in json_data:
                 cache = json_data[AppJson.cache]
                 self.find_cta_keys(cache)
+                self.set_platforms(cache)
                 self.set_price_data(cache)
 
     def set_main_data(self, data):
@@ -235,6 +242,13 @@ class PSParser(HTMLParser):
         self.game.category = main_data[LdJson.category]
         self.game.description = main_data[LdJson.description]
         self.game.image_link = main_data[LdJson.image]
+
+    def set_platforms(self, cache_data):
+        product_key = AppJson.product + self.game.product_id
+        if product_key in cache_data:
+            product = cache_data[product_key]
+            if AppJson.platforms in product:
+                self.game.platforms = product[AppJson.platforms]
 
     def set_price_data(self, cache_data):
         for cta_id in self.cta_ids:

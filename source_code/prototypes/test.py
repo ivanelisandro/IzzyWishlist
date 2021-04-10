@@ -14,6 +14,7 @@ class PSParser(HTMLParser):
     product_key = f'Product:{prod_id}'
     price_key = 'price'
     web_ctas_key = 'webctas'
+    platforms_key = 'platforms'
     refs_key = '__ref'
     name_key = 'name'
     base_price_key = 'basePrice'
@@ -34,6 +35,12 @@ class PSParser(HTMLParser):
                 for cta in product[self.web_ctas_key]:
                     if self.refs_key in cta:
                         self.cta_ids.append(cta[self.refs_key])
+
+    def find_platforms(self, cache_data):
+        if self.product_key in cache_data:
+            product = cache_data[self.product_key]
+            if self.platforms_key in product:
+                print(product[self.platforms_key])
 
     def error(self, message):
         print(f"Error: {message}")
@@ -61,6 +68,7 @@ class PSParser(HTMLParser):
             if self.cache_key in json_data:
                 cache = json_data[self.cache_key]
                 self.find_cta_key(cache)
+                self.find_platforms(cache)
                 for cta_id in self.cta_ids:
                     if cta_id and cta_id in cache:
                         game = cache[cta_id]

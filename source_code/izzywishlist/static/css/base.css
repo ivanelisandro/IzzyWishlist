@@ -41,10 +41,13 @@ input, textarea {
     border-radius: 15px;
 }
 
+i {
+    padding: 5px 2px;
+}
+
 button {
     background-color: #004299;
-    margin: 0px 10px;
-    padding: 5px 10px;
+    margin: 0px 10px 0px 0px;
 	border: none;
 	border-radius: 20px;
     color: #ffffff;
@@ -74,11 +77,16 @@ img {
 	padding: 0% 2%;
     text-align: left;
     font-size: 20px;
-    width: 50%;
+    width: 60%;
 	overflow: hidden;
 }
 
 .table_game_category {
+    text-align: left;
+    font-size: 15px;
+}
+
+.table_game_platform {
     text-align: left;
     font-size: 15px;
 }
@@ -107,7 +115,7 @@ img {
 
 a {
 	padding: 5px 10px;
-	border-radius: 10px;
+	border-radius: 20px;
 	background-color: #004299;
     color: #ffffff;
     text-decoration: none;
@@ -137,15 +145,6 @@ a:hover{
 	overflow: hidden;
 }
 
-.queue_label {
-    font-size: 20px;
-}
-
-.next_client_label {
-    text-align: center;
-    font-size: 45px;
-}
-
 .input_game_label {
     text-align: left;
 	padding: 0px 20px;
@@ -158,6 +157,10 @@ a:hover{
     -webkit-box-sizing: border-box; /* Safari/Chrome, other WebKit */
     -moz-box-sizing: border-box;    /* Firefox, other Gecko */
     box-sizing: border-box;         /* Opera/IE 8+ */
+}
+
+.submit_game {
+    padding: 5px 10px;
 }
 
 .games_count_label {
